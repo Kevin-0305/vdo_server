@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://106.52.102.224/vdo1?${datasource.mysql.parameters}
+      username: root
+      password: Shenzhen@2019
+      stat-view-servlet:
+        login-username: vdo-app
+        login-password: hTSZT8n9XKLg
+
+server:
+  # 内置服务器启动端口
+  port: 8080
+  undertow:
+    accesslog:
+      enabled: true
+      dir: /home/vdouser/logs/vdo-app
+      pattern: '[%{time,yyyy-MM-dd HH:mm:ss.S z}] [%I] %s "%r" %{i,Authorization} %b bytes'
+      rotate: true
+
+file:
+  staticAccessPath: /static/image/**
+  uploadFolder: /data/vdoapp/

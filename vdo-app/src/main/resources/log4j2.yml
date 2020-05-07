@@ -1,0 +1,93 @@
+# https://logging.apache.org/log4j/2.x/manual/appenders.html
+# ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
+# Don't forget to set system property "-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"
+# to make all loggers asynchronous.
+
+Configuration:
+  status: debug
+  monitorInterval: 20
+  # 定义全局变量
+  Properties:
+    Property:
+      # 缺省配置（用于本地开发环境）。其他环境需要在VM参数中指定，例如生产环境：
+      # -Dlog.level.console=warn -Dlog.level.com.daily=debug
+      - name: log.level.console
+        value: info
+      - name: log.level.com.daily
+        value: all
+      - name: log.path
+        value: ${sys:user.home}/logs/vdo-app
+      - name: project.name
+        value: vdo-app
+      - name: log.pattern
+        value: "%d{yyyy-MM-dd HH:mm:ss.SSS}[%5p][%15.15t]%6X{id} %-40.40c{1.}: %m%n%ex"
+
+  Appenders:
+    Console:
+      name: CONSOLE
+      follow: true
+      PatternLayout:
+        pattern: ${log.pattern}
+      ThresholdFilter:
+        level: ${sys:log.level.console}
+    RollingRandomAccessFile:
+      - name: DEFAULT_ROLLING_FILE
+        fileName: ${log.path}/info.log
+        filePattern: "${log.path}/history/info-%d{yyyy-MM-dd}.log.gz"
+        immediateFlush: false
+        PatternLayout:
+          pattern: ${log.pattern}
+        Policies:
+          # 按天分类
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 1
+        # 文件最多30个
+        DefaultRolloverStrategy:
+          max: 30
+          compressionLevel: 7
+      - name: ERROR_ROLLING_FILE
+        fileName: ${log.path}/error.log
+        filePattern: "${log.path}/history/error-%d{yyyy-MM-dd}.log.gz"
+        ThresholdFilter:
+          level: error
+        PatternLayout:
+          pattern: ${log.pattern}
+        Policies:
+          # 按天分类
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 1
+        # 文件最多30个
+        DefaultRolloverStrategy:
+          max: 30
+          compressionLevel: 7
+  Loggers:
+    Root:
+      level: info
+      includeLocation: false
+      AppenderRef:
+        - ref: CONSOLE
+        - ref: DEFAULT_ROLLING_FILE
+        - ref: ERROR_ROLLING_FILE
+        #- ref: MAIL
+
+    # 监听具体包下面的日志
+    Logger:
+      # 为com.daily包配置特殊的Log级别，方便调试
+      - name: com.daily
+        additivity: flase
+        level: ${sys:log.level.com.daily}
+        AppenderRef:
+          - ref: CONSOLE
+          - ref: DEFAULT_ROLLING_FILE
+          - ref: ERROR_ROLLING_FILE
+
+      # 忽略mybatis的info及以上级别日志
+      - name: org.mybatis
+        additivity: flase
+        level: warn
+        AppenderRef:
+          - ref: CONSOLE
+          - ref: DEFAULT_ROLLING_FILE
+          - ref: ERROR_ROLLING_FILE

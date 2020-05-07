@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost/vdo?${datasource.mysql.parameters}
+      username: root
+      password: 12345678
+      stat-view-servlet:
+        login-username: vdoapp
+        login-password: hTSZT8n9XKLg
+
+server:
+  # 内置服务器启动端口
+  port: 8080
+  undertow:
+    accesslog:
+      enabled: true
+      dir: /Users/shengyan/logs/vdo-app
+      pattern: '[%{time,yyyy-MM-dd HH:mm:ss.S z}] [%I] %s "%r" %{i,Authorization} %b bytes'
+      rotate: true
+
+file:
+  staticAccessPath: /static/image/**
+  uploadFolder: /Users/shengyan/vdo/

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- 事务管理配置 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" rollback-for="Exception" propagation="REQUIRED"/>
+            <tx:method name="insert*" rollback-for="Exception" propagation="REQUIRED"/>
+            <tx:method name="update*" rollback-for="Exception" propagation="REQUIRED"/>
+            <tx:method name="delete*" rollback-for="Exception" propagation="REQUIRED"/>
+            <tx:method name="add*" rollback-for="Exception" propagation="REQUIRED"/>
+            <tx:method name="modify*" rollback-for="Exception" propagation="REQUIRED"/>
+            <tx:method name="remove*" rollback-for="Exception" propagation="REQUIRED"/>
+            <tx:method name="find*" propagation="NOT_SUPPORTED" />
+            <tx:method name="get*" propagation="NOT_SUPPORTED" />
+            <tx:method name="query*" propagation="NOT_SUPPORTED" />
+            <tx:method name="*" propagation="NOT_SUPPORTED"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config proxy-target-class="true" expose-proxy="true">
+        <aop:pointcut id="txPointcut"
+                      expression="(execution(* com.tal.coding.platform.service.*.*(..)))"/>
+        <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"/>
+    </aop:config>
+
+
+</beans>
