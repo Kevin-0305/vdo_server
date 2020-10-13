@@ -21,7 +21,7 @@
 
     <properties>
         <springboot.version>2.1.4.RELEASE</springboot.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <junit.version>4.12</junit.version>
         <mysql.version>8.0.13</mysql.version>
         <java.version>11</java.version>
