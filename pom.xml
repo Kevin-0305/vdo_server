@@ -40,7 +40,7 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <httpcore.version>4.4.4</httpcore.version>
-        <httpclient.version>4.5.2</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <batik.version>1.8</batik.version>
         <wmf2svg.version>0.9.0</wmf2svg.version>
         <jodconverter.version>2.2.1</jodconverter.version>
